@@ -1,10 +1,15 @@
 package com.boxstream.bs_identity.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Table(name = "tbl_user")
 public class User {
     @Id
