@@ -1,5 +1,6 @@
 package com.boxstream.bs_identity.controller;
 
+import com.boxstream.bs_identity.dto.ApiResponse;
 import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.entity.User;
@@ -20,8 +21,12 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public User createUser(@RequestBody @Valid UserCreationRequest user) {
-        return userService.createNewUser(user);
+    public ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest user) {
+        ApiResponse<User> response = new ApiResponse<>();
+        response.setCode(1);
+        response.setMessage("User create successfully!");
+        response.setData(userService.createNewUser(user));
+        return response;
     }
 
     @GetMapping("/all")

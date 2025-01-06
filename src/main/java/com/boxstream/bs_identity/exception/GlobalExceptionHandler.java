@@ -1,5 +1,6 @@
 package com.boxstream.bs_identity.exception;
 
+import com.boxstream.bs_identity.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,9 +31,21 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
-        logger.error("User not found exception: {}", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+    public ResponseEntity<ApiResponse> handleUserNotFoundException(UserNotFoundException ex) {
+        return buildErrorResponse(ex);
+    }
+
+    @ExceptionHandler(InvalidUUIDFormatException.class)
+    public ResponseEntity<ApiResponse> handleInvalidUUIDFormatException(InvalidUUIDFormatException ex) {
+        return buildErrorResponse(ex);
+    }
+
+    private ResponseEntity<ApiResponse> buildErrorResponse(RuntimeException ex) {
+        logger.error("{}: {}", ex.getClass(), ex.getMessage());
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(0);
+        apiResponse.setMessage(ex.getMessage());
+        return ResponseEntity.badRequest().body(apiResponse);
     }
 
 
