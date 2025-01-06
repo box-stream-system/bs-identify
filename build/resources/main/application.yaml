@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: bs-identity
+
+  datasource:
+    url: "jdbc:mysql://localhost:3306/box-stream"
+    username: root
+    password: 123456
