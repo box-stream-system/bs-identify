@@ -30,22 +30,25 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred. Please try again later.");
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ApiResponse> handleUserNotFoundException(UserNotFoundException ex) {
-        return buildErrorResponse(ex);
-    }
+    @ExceptionHandler({UserNotFoundException.class, InvalidUUIDFormatException.class})
+    public ResponseEntity<ApiResponse> handleSpecificExceptions(RuntimeException ex) {
+        ErrorCode errorCode = getErrorCodeFromException(ex);
+        logger.error("{}: {}", errorCode.name(), errorCode.getMessage());
 
-    @ExceptionHandler(InvalidUUIDFormatException.class)
-    public ResponseEntity<ApiResponse> handleInvalidUUIDFormatException(InvalidUUIDFormatException ex) {
-        return buildErrorResponse(ex);
-    }
-
-    private ResponseEntity<ApiResponse> buildErrorResponse(RuntimeException ex) {
-        logger.error("{}: {}", ex.getClass(), ex.getMessage());
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(0);
-        apiResponse.setMessage(ex.getMessage());
-        return ResponseEntity.badRequest().body(apiResponse);
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+
+        return ResponseEntity.status(errorCode.getCode()).body(apiResponse);
+    }
+
+    private ErrorCode getErrorCodeFromException(RuntimeException ex) {
+        if (ex instanceof UserNotFoundException) {
+            return ((UserNotFoundException) ex).getErrorCode();
+        } else if (ex instanceof InvalidUUIDFormatException) {
+            return ((InvalidUUIDFormatException) ex).getErrorCode();
+        }
+        throw new IllegalStateException("Unhandled exception type: " + ex.getClass().getName());
     }
 
 

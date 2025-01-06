@@ -42,9 +42,13 @@ public class UserService {
     }
 
     public User getByUserId(String id) {
-        if (!isValidUUID(id)) throw new InvalidUUIDFormatException("Invalid UUID format.");
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found."));
+        if (!isValidUUID(id)) {
+            throw new InvalidUUIDFormatException();
+        }
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
+
 
     private boolean isValidUUID(String id) {
         try {
