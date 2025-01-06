@@ -5,6 +5,7 @@ import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.entity.User;
 import com.boxstream.bs_identity.exception.InvalidUUIDFormatException;
 import com.boxstream.bs_identity.exception.UserNotFoundException;
+import com.boxstream.bs_identity.exception.UsernameExistsException;
 import com.boxstream.bs_identity.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class UserService {
 
 
         if (userRepository.existsByUsername(newUser.getUsername()))
-            throw new RuntimeException("User exists.");
+            throw new UsernameExistsException();
 
 
         User user = new User();
