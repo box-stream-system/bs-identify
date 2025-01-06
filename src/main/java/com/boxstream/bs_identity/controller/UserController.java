@@ -4,6 +4,7 @@ import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.entity.User;
 import com.boxstream.bs_identity.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public User createUser(@RequestBody UserCreationRequest user) {
+    public User createUser(@RequestBody @Valid UserCreationRequest user) {
         return userService.createNewUser(user);
     }
 
