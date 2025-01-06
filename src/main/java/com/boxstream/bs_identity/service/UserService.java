@@ -1,9 +1,10 @@
 package com.boxstream.bs_identity.service;
 
 import com.boxstream.bs_identity.dto.request.UserCreationRequest;
+import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.entity.User;
+import com.boxstream.bs_identity.exception.UserNotFoundException;
 import com.boxstream.bs_identity.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,6 +40,22 @@ public class UserService {
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid UUID format.");
         }
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found."));
+    }
+
+    public User updateUser(String userId, UserUpdateRequest user) {
+        User u = getByUserId(userId);
+        u.setFirstName(user.getFirstName());
+        u.setLastName(user.getLastName());
+        u.setEmail(user.getEmail());
+        u.setPassword(user.getPassword());
+        u.setMiddleName(user.getMiddleName());
+        u.setDateOfBirth(user.getDateOfBirth());
+        u.setPhone(user.getPhone());
+        return userRepository.save(u);
+    }
+
+    public void deleteUser(String userId) {
+        userRepository.deleteById(userId);
     }
 }

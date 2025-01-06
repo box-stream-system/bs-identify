@@ -1,6 +1,7 @@
 package com.boxstream.bs_identity.controller;
 
 import com.boxstream.bs_identity.dto.request.UserCreationRequest;
+import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.entity.User;
 import com.boxstream.bs_identity.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,17 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable String id) {
         return ResponseEntity.ok(userService.getByUserId(id));
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<User> updateUser(@PathVariable("userId") String userId,
+                                           @RequestBody UserUpdateRequest user) {
+        return ResponseEntity.ok(userService.updateUser(userId, user));
+    }
+
+    @DeleteMapping("/del/{userId}")
+    public String deleteUser(@PathVariable("userId") String userId) {
+        userService.deleteUser(userId);
+        return "User deleted";
     }
 }
