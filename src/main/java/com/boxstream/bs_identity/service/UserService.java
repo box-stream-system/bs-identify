@@ -13,6 +13,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -31,7 +33,13 @@ public class UserService {
 
     public User createNewUser(UserCreationRequest newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) throw new UsernameExistsException();
-        return userRepository.save(userMapper.toUser(newUser));
+        User user = userMapper.toUser(newUser);
+
+        // HASHING PASSWORD
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
+        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
+
+        return userRepository.save(user);
     }
 
     public List<UserResponse> getAllUsers() {

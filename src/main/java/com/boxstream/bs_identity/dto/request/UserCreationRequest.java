@@ -1,31 +1,29 @@
 package com.boxstream.bs_identity.dto.request;
 
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
     @Size(min = 8, max = 30, message = "Username must be at least 8 characters")
-    private String username;
+     String username;
 
-    private String password;
+     String password;
 
-    private String firstName;
+     String firstName;
 
-    private String lastName;
+     String lastName;
 
-    private String middleName;
+     String middleName;
 
-    private String email;
+     String email;
 
-    private String phone;
+     String phone;
 
-    private String dateOfBirth;
+     String dateOfBirth;
 }
