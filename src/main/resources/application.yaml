@@ -27,3 +27,6 @@ logging:
     root: INFO
     org.springframework.web: ERROR
     com.boxstream.bs_identity: DEBUG
+
+jwt:
+  signerKey: "EBw5PUxLRUlYDvWxh9SbbdCbtGshPPgoPDKfy9Sd/Qeu5G3lHox+lEsJ//ZDjvaf"

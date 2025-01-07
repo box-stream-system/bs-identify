@@ -57,6 +57,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(errorCode.getCode()).body(apiResponse);
     }
 
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<ApiResponse> handleAuthenticationFailedException(AuthenticationFailedException ex) {
+        ErrorCode errorCode = getErrorCodeFromException(ex);
+        logger.error("{}: {}", errorCode.name(), errorCode.getMessage());
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
+        return ResponseEntity.status(errorCode.getCode()).body(apiResponse);
+    }
+
     private ErrorCode getErrorCodeFromException(RuntimeException ex) {
         if (ex instanceof UserNotFoundException) {
             return ((UserNotFoundException) ex).getErrorCode();
@@ -64,6 +74,8 @@ public class GlobalExceptionHandler {
             return ((InvalidUUIDFormatException) ex).getErrorCode();
         } else if (ex instanceof UsernameExistsException) {
             return ((UsernameExistsException) ex).getErrorCode();
+        } else if (ex instanceof AuthenticationFailedException) {
+            return ((AuthenticationFailedException) ex).getErrorCode();
         }
         throw new IllegalStateException("Unhandled exception type: " + ex.getClass().getName());
     }
