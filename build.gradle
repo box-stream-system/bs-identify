@@ -27,17 +27,21 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-logging'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation:3.3.2'
-	implementation 'org.springframework.security:spring-security-core:6.3.5'
-	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '9.37.2'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+	//implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2' // OK
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// MapStruct
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()
