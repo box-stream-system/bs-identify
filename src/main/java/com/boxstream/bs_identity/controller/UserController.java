@@ -6,11 +6,15 @@ import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.dto.response.UserResponse;
 import com.boxstream.bs_identity.entity.User;
 import com.boxstream.bs_identity.service.UserService;
+import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("users")
 public class UserController {
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     UserService userService;
 
 
@@ -34,6 +39,12 @@ public class UserController {
 
     @GetMapping("/all")
     public List<UserResponse> getAllUsers() {
+
+        // MUST HAVE ROLE ADMIN TO VIEW ALL USERS
+        // SecurityContextHolder : stored security data
+        var authenticationInfo = SecurityContextHolder.getContext().getAuthentication();
+        logger.info("Authentication info: {}", authenticationInfo.getAuthorities());
+
         return userService.getAllUsers();
     }
 

@@ -26,12 +26,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +103,7 @@ public class AuthenticationService {
                 ))
                 .claim("email", user.getEmail())
                 .claim("phone", user.getPhone())
+                .claim("scope", buildScopeRoles(user))
                 .build();
 
         // Final Payload
@@ -119,5 +124,16 @@ public class AuthenticationService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    String buildScopeRoles(User user) {
+        List<String> tempRole = new ArrayList<>();
+        tempRole.add(user.getTempRole());
+        tempRole.add("TEMP");
+
+        StringJoiner stringJoiner = new StringJoiner(" ");
+
+        tempRole.forEach(stringJoiner::add);
+        return stringJoiner.toString();
     }
 }

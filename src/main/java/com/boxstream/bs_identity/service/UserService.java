@@ -4,6 +4,7 @@ import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.dto.response.UserResponse;
 import com.boxstream.bs_identity.entity.User;
+import com.boxstream.bs_identity.exception.GlobalExceptionHandler;
 import com.boxstream.bs_identity.exception.InvalidUUIDFormatException;
 import com.boxstream.bs_identity.exception.UserNotFoundException;
 import com.boxstream.bs_identity.exception.UsernameExistsException;
@@ -13,6 +14,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,9 +30,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
-
+    Logger logger = LoggerFactory.getLogger(UserService.class);
     UserRepository userRepository;
     UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
 
 
     public User createNewUser(UserCreationRequest newUser) {
@@ -36,9 +41,8 @@ public class UserService {
         User user = userMapper.toUser(newUser);
 
         // HASHING PASSWORD
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-
+        logger.info("Creating a new user: " + user.getUsername());
         return userRepository.save(user);
     }
 

@@ -4,32 +4,44 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Data
-@Entity
+
 @Builder
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@Table(name = "tbl_user")
+@Table(name = "user")
+@Entity
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    String id;
 
-    private String username;
+    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    String username;
 
-    private String password;
+    String password;
 
-    private String firstName;
+    String firstName;
 
-    private String lastName;
+    String lastName;
 
-    private String middleName;
+    String middleName;
 
-    private String email;
+    String email;
 
-    private String phone;
+    String phone;
 
-    private String dateOfBirth;
+    String dateOfBirth;
+
+    @ManyToMany
+    Set<Role> roles;
+
+    String tempRole;
 
 }
