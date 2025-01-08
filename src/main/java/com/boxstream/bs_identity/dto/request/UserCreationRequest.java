@@ -1,8 +1,12 @@
 package com.boxstream.bs_identity.dto.request;
 
+import com.boxstream.bs_identity.validator.DobConstraint;
+import com.boxstream.bs_identity.validator.PasswordConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -10,20 +14,22 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
-    @Size(min = 8, max = 30, message = "Username must be at least 8 characters")
-     String username;
+    @Size(min = 8, max = 30, message = "USERNAME_INVALID")
+    String username;
 
-     String password;
+    @PasswordConstraint(min = 8)
+    String password;
 
-     String firstName;
+    String firstName;
 
-     String lastName;
+    String lastName;
 
-     String middleName;
+    String middleName;
 
-     String email;
+    String email;
 
-     String phone;
+    String phone;
 
-     String dateOfBirth;
+    @DobConstraint(min = 15)
+    LocalDate dateOfBirth;
 }

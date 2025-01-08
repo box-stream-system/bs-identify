@@ -1,5 +1,8 @@
 package com.boxstream.bs_identity.exception;
 
+import lombok.Getter;
+
+@Getter
 public class AuthenticationFailedException extends RuntimeException {
     private final ErrorCode errorCode;
 
@@ -8,7 +11,4 @@ public class AuthenticationFailedException extends RuntimeException {
         this.errorCode = ErrorCode.AUTHENTICATION_FAILED;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
 }

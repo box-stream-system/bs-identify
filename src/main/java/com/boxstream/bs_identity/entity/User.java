@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,7 +38,7 @@ public class User {
 
     String phone;
 
-    String dateOfBirth;
+    LocalDate dateOfBirth;
 
     @ManyToMany
     Set<Role> roles;

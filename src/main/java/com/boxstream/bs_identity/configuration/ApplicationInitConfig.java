@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,14 +28,17 @@ public class ApplicationInitConfig {
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
-        Role roleAdmin = new Role();
-        roleAdmin.setName("ADMIN");
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(roleAdmin);
 
         return args -> {
             if(userRepository.findByUsername("admin").isEmpty()) {
+                Role roleAdmin = new Role();
+                roleAdmin.setName("ADMIN");
+
+                Set<Role> roles = new HashSet<>();
+                roles.add(roleAdmin);
+
+                LocalDate dateOfBirth2000 = LocalDate.of(2000, 1, 1);
 
                 User user = User.builder()
                         .username("admin")
@@ -45,7 +49,7 @@ public class ApplicationInitConfig {
                         .firstName("admin")
                         .lastName("admin")
                         .middleName("admin")
-                        .dateOfBirth("1997-07-07")
+                        .dateOfBirth(dateOfBirth2000)
                         .build();
                 userRepository.save(user);
                 logger.info("Admin account is created");

@@ -20,7 +20,10 @@ public enum ErrorCode {
     UNAUTHORIZED(1008, "Unauthorized", HttpStatus.FORBIDDEN),
     METHOD_ARGUMENT_NOT_VALID(1009, "Method Argument Not Valid", HttpStatus.BAD_REQUEST),
     UNAUTHENTICATED(1010, "Unauthenticated", HttpStatus.UNAUTHORIZED),
-
+    INVALID_DOB(1011, "Invalid DOB", HttpStatus.BAD_REQUEST),
+    USERNAME_INVALID(1012, "Username is invalid", HttpStatus.BAD_REQUEST),
+    INVALID_PASSWORD(1013, "Password is invalid", HttpStatus.BAD_REQUEST),
+    VALIDATION_FAILED(1014, "Validation failed", HttpStatus.BAD_REQUEST),
     ;
 
     private final int code; // error code user define for dev
