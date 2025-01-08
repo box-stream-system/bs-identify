@@ -22,9 +22,6 @@ public class DobValidator implements ConstraintValidator<DobConstraint, LocalDat
     public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
         if (Objects.isNull(value)) return true;
         long years = ChronoUnit.YEARS.between(value, LocalDate.now());
-
-
-        // do not throw Exception from here
         if (years < min) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Age must be at least " + min + " years")

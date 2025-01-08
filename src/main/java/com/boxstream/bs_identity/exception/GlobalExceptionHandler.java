@@ -105,6 +105,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handleValidationException(MethodArgumentNotValidException exception) {
+
+        // Build response data
         List<Map<String, Object>> errors = exception.getBindingResult().getAllErrors().stream()
                 .map(error -> {
                     String field = ((FieldError) error).getField();
@@ -119,8 +121,8 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return ResponseEntity.badRequest().body(ApiResponse.builder()
-                .code(ErrorCode.METHOD_ARGUMENT_NOT_VALID.getCode())
-                .message("Validation failed")
+                .code(ErrorCode.VALIDATION_FAILED.getCode())
+                .message(ErrorCode.VALIDATION_FAILED.getMessage())
                 .data(errors)
                 .build());
     }
