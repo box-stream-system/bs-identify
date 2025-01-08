@@ -127,13 +127,15 @@ public class AuthenticationService {
     }
 
     String buildScopeRoles(User user) {
-        List<String> tempRole = new ArrayList<>();
-        tempRole.add(user.getTempRole());
-        tempRole.add("TEMP");
-
         StringJoiner stringJoiner = new StringJoiner(" ");
+        user.getRoles().forEach(role -> {
+            stringJoiner.add(role.getName());
+            if(!CollectionUtils.isEmpty(role.getPermissions()))
+                role.getPermissions().forEach(permission -> {
+                    stringJoiner.add(permission.getName());
+                });
 
-        tempRole.forEach(stringJoiner::add);
+        });
         return stringJoiner.toString();
     }
 }

@@ -1,27 +1,30 @@
 package com.boxstream.bs_identity.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
 
-    private String password;
+     String password;
 
-    private String firstName;
+     String firstName;
 
-    private String lastName;
+     String lastName;
 
-    private String middleName;
+     String middleName;
 
-    private String email;
+     String email;
 
-    private String phone;
+     String phone;
 
-    private String dateOfBirth;
+     String dateOfBirth;
+
+     Set<String> roles;
 }

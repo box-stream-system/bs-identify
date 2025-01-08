@@ -1,6 +1,5 @@
 package com.boxstream.bs_identity.configuration;
 
-import com.boxstream.bs_identity.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,7 +46,7 @@ public class SecurityConfig {
                 requests ->
                     requests
                             .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
-                            .requestMatchers(HttpMethod.GET, VIEW_ALL_USERS).hasRole(String.valueOf(Role.ADMIN)) // or hasAuthority("ROLE_ADMIN")
+                            .requestMatchers(HttpMethod.GET, VIEW_ALL_USERS).hasRole("ADMIN") // or hasAuthority("ROLE_ADMIN")
                             .anyRequest().authenticated()); // others are private
 
         // config JWT decoder

@@ -9,6 +9,7 @@ import com.boxstream.bs_identity.exception.InvalidUUIDFormatException;
 import com.boxstream.bs_identity.exception.UserNotFoundException;
 import com.boxstream.bs_identity.exception.UsernameExistsException;
 import com.boxstream.bs_identity.mapper.UserMapper;
+import com.boxstream.bs_identity.repository.RoleRepository;
 import com.boxstream.bs_identity.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,6 +39,7 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
 
     public User createNewUser(UserCreationRequest newUser) {
@@ -83,7 +86,18 @@ public class UserService {
 
     public UserResponse updateUser(String userId, UserUpdateRequest userUpdateRequest) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        // map userUpdateRequest to User
         userMapper.updateUser(user, userUpdateRequest);
+
+        // hash password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // build user roles
+        // map list string roles from request to set roles in Entity
+        var roles = roleRepository.findAllById(userUpdateRequest.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

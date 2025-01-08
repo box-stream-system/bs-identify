@@ -3,6 +3,8 @@ package com.boxstream.bs_identity.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +26,6 @@ public class UserResponse {
      String phone;
 
      String dateOfBirth;
+
+     Set<RoleResponse> roles;
 }
