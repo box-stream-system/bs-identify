@@ -70,4 +70,12 @@ public class UserController {
         userService.deleteUser(userId);
         return "User deleted";
     }
+
+    @GetMapping("/myinfo")
+    public ApiResponse<UserResponse> getMyInfo() {
+        return ApiResponse.<UserResponse>builder()
+                .data(userService.getCurrentUserInfo())
+                .code(200)
+                .build();
+    }
 }
