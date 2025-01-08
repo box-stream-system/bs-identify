@@ -40,8 +40,6 @@ public class UserController {
     @GetMapping("/all")
     public List<UserResponse> getAllUsers() {
 
-        // MUST HAVE ROLE ADMIN TO VIEW ALL USERS
-        // SecurityContextHolder : stored security data
         var authenticationInfo = SecurityContextHolder.getContext().getAuthentication();
         logger.info("Authentication info: {}", authenticationInfo.getAuthorities());
 
