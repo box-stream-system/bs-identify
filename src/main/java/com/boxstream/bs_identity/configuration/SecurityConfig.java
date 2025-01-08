@@ -1,5 +1,6 @@
 package com.boxstream.bs_identity.configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +25,18 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("${jwt.signerKey}")
-    private String signerKey;
-
     public final String PUBLIC_ENDPOINT[] = {
             "/users/add",
             "/auth/token",
-            "/auth/introspect"
+            "/auth/introspect",
+            "/auth/logout",
+            "/auth/refreshtoken"
     };
 
-    public final String VIEW_ALL_USERS = "/users/all";
+    private final String VIEW_ALL_USERS = "/users/all";
+
+    @Autowired
+    private JwtDecoderCustom jwtDecoderCustom;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -49,10 +52,11 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.GET, VIEW_ALL_USERS).hasRole("ADMIN") // or hasAuthority("ROLE_ADMIN")
                             .anyRequest().authenticated()); // others are private
 
-        // config JWT decoder
-        // for others request must authenticate: need a valid JWT
+        // This config to make sure all others request must decode and validate TOKEN
+        // Is the TOKEN Valid | Expired | Logged-out ?
+        // We make a JwtDecoderCustom to handle those stuff
         httpSecurity.oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
+                oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoderCustom) // Call the custom that handle JWT validate
                         .jwtAuthenticationConverter(jwtAuthenticationConverter())) // apply a custom converter
                         .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // point to custom handle if have exception occur in this step
         );
@@ -61,16 +65,6 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    // setting a Bean of JWT decoder
-    @Bean
-    JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(), "HS512"); // must match algorithm with generate token
-
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
 
     @Bean
     PasswordEncoder passwordEncoder() {

@@ -24,6 +24,10 @@ public enum ErrorCode {
     USERNAME_INVALID(1012, "Username is invalid", HttpStatus.BAD_REQUEST),
     INVALID_PASSWORD(1013, "Password is invalid", HttpStatus.BAD_REQUEST),
     VALIDATION_FAILED(1014, "Validation failed", HttpStatus.BAD_REQUEST),
+    INVALID_TOKEN(1015, "Invalid token", HttpStatus.BAD_REQUEST),
+    TOKEN_EXPIRED(1016, "Token expired", HttpStatus.BAD_REQUEST),
+    TOKEN_LOGGED_OUT(1017, "Token logged out", HttpStatus.BAD_REQUEST),
+
     ;
 
     private final int code; // error code user define for dev
