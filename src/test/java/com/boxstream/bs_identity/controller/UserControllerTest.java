@@ -82,10 +82,8 @@ public class UserControllerTest {
      */
     @Test
     void createUser_validRequest_success() throws Exception {
-        logger.info("UserControllerTest: createUser()");
 
         // GIVEN
-
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String content = objectMapper.writeValueAsString(userCreationRequest);
@@ -93,7 +91,6 @@ public class UserControllerTest {
         // this setting return userResponse when ever call userService.createNewUser()
         Mockito.when(userService.createNewUser(ArgumentMatchers.any()))
                         .thenReturn(userResponse);
-
 
         // WHEN, THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -105,6 +102,34 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("code").value(1)) // code: 1
                 .andExpect(MockMvcResultMatchers.jsonPath("data.id").value("wrewwewwef"));
                 // add more andExpect here
+    }
+
+    @Test
+    void createUser_usernameInvalid_fail() throws Exception {
+
+        // GIVEN
+        userCreationRequest.setUsername("john"); // set the invalid username (less than 8 characters)
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String content = objectMapper.writeValueAsString(userCreationRequest);
+
+        // this setting return userResponse when ever call userService.createNewUser()
+        Mockito.when(userService.createNewUser(ArgumentMatchers.any()))
+                .thenReturn(userResponse);
+
+
+        // WHEN, THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users/add")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(content))
+
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // Ok mean http status code 200
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1014)) // code: 1014
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Validation failed")) // code: 1
+                .andExpect(MockMvcResultMatchers.jsonPath("data[0].message").value("USERNAME_INVALID"));
+        // add more andExpect here
     }
 
 }
