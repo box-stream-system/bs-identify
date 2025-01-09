@@ -33,6 +33,8 @@ dependencies {
 	//implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2' // OK
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
 
 	// MapStruct
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

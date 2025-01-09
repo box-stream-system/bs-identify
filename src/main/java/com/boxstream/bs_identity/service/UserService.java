@@ -42,14 +42,14 @@ public class UserService {
     RoleRepository roleRepository;
 
 
-    public User createNewUser(UserCreationRequest newUser) {
+    public UserResponse createNewUser(UserCreationRequest newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) throw new UsernameExistsException();
         User user = userMapper.toUser(newUser);
 
         // HASHING PASSWORD
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         logger.info("Creating a new user: " + user.getUsername());
-        return userRepository.save(user);
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

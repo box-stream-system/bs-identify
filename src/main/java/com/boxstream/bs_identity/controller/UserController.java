@@ -29,8 +29,8 @@ public class UserController {
 
 
     @PostMapping("/add")
-    public ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest user) {
-        ApiResponse<User> response = new ApiResponse<>();
+    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest user) {
+        ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setCode(1);
         response.setMessage("User create successfully!");
         response.setData(userService.createNewUser(user));
