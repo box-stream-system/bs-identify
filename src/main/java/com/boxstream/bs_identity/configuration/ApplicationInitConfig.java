@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,16 @@ public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
     @Bean
+    @ConditionalOnProperty(prefix = "spring",
+            value = "datasource.driver-class-name",
+            havingValue = "com.mysql.cj.jdbc.Driver")
+    /**
+     * @ConditionalOnProperty
+     * If run test cases
+     * It's will use H2 Database
+     * Then userRepository.findByUsername("admin") will error
+     * then this config to make sure this applicationRunner() only run when not run test case
+     */
     ApplicationRunner applicationRunner(UserRepository userRepository) {
 
 

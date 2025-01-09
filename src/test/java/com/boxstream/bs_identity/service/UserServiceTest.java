@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 
 @SpringBootTest
 @AutoConfigureMockMvc // for create a request to our test function
+@TestPropertySource("/test.properties") // point to test properties instead of main file .ymal
 public class UserServiceTest {
 
     @Autowired

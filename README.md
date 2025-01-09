@@ -2,7 +2,8 @@
 Identify Service for Box Stream
 
 ### JWT
-- Impl follow Oauth2
+- VALID_DURATION time
+- REFRESHABLE_DURATION time
 
 ### Encrypt Password
 - Bcrypt
@@ -16,7 +17,7 @@ Identify Service for Box Stream
   - jwrId()
 
 ### Refresh token machines
-- If current token is about to expired
+- If current token is about to be expired
 - Client will call refresh token to get a new one
 - Server:
   - Check the current must valid
@@ -25,15 +26,12 @@ Identify Service for Box Stream
   - Also do logged-out the current token
   - Then generate a new token return to client
 
-### Other want to use our API
-- Flow:
-  - Client:
-    - RequestApi, get a token, stored it in their local storage or anywhere
-    - Client request many other request using that token
-  - Token expired
-    - If our server check token expired, then we will ask client a refresh token
-    - Client send the refresh token to server
-    - If refresh token match and valid
-      - Server return a new access token for client
-    - If refresh token is expired
-      - Server need client logging
+
+
+### Testing
+  - JUnit
+  - Mockito: for make deal fake data that come from other layer
+  - Isolation: Make our test service can run on any environment not depend on any third party.
+    - Ex. Instead of connect to MySQL of main program, ee config for Unit test connect to any others like H2 DB, and not effect to the main DB service (DB server, EC2)
+    - 
+    

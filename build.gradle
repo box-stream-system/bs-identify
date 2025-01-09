@@ -42,9 +42,13 @@ dependencies {
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// H2 DB
+	testImplementation group: 'com.h2database', name: 'h2', version: '2.2.224'
 }
 
 
 tasks.named('test') {
 	useJUnitPlatform()
+
 }

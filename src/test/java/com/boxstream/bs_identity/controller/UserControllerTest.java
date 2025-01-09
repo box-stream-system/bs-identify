@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 
 @SpringBootTest
 @AutoConfigureMockMvc // for create a request to our test function
+@TestPropertySource("/test.properties") // point to test properties instead of main file .ymal
 public class UserControllerTest {
 
     private final Logger logger = Logger.getLogger(UserControllerTest.class.getName());
