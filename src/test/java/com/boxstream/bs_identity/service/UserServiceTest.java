@@ -4,6 +4,7 @@ import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.response.UserResponse;
 import com.boxstream.bs_identity.entity.User;
 import com.boxstream.bs_identity.exception.ApplicationException;
+import com.boxstream.bs_identity.exception.UserNotFoundException;
 import com.boxstream.bs_identity.exception.UsernameExistsException;
 import com.boxstream.bs_identity.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
@@ -20,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc // for create a request to our test function
@@ -111,4 +114,26 @@ public class UserServiceTest {
         Assertions.assertEquals(exception.getErrorCode().getCode(), 1004);
         Assertions.assertEquals(exception.getMessage(), "Username already exists");
     }
+
+    @Test
+    @WithMockUser(username = "johnwick97")
+    void getMyinfo_validRequest_success() {
+
+        // GIVEN
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+
+        // WHEN
+        var response = userService.getCurrentUserInfo();
+
+        // THEN
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(userResponse.getUsername(), response.getUsername());
+        Assertions.assertEquals(userResponse.getFirstName(), response.getFirstName());
+        Assertions.assertEquals(userResponse.getLastName(), response.getLastName());
+        Assertions.assertEquals(userResponse.getEmail(), response.getEmail());
+        Assertions.assertEquals(userResponse.getPhone(), response.getPhone());
+        Assertions.assertEquals(userResponse.getId(), response.getId());
+
+    }
+
 }
