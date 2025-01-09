@@ -15,6 +15,23 @@ tasks.jacocoTestReport {
 		xml.required = true  // Enable XML report (useful for CI tools like SonarQube)
 		html.required = true // Enable HTML report for easy review
 	}
+
+	// Exclude classes or packages
+	classDirectories.setFrom(
+			files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: [
+						// Exclude package
+						'com/boxstream/bs_identity/dto/**',
+						'com/boxstream/bs_identity/entity/**',
+						'com/boxstream/bs_identity/mapper/**',
+
+						// Exclude specific class
+						'com/boxstream/bs_identity/controller/RoleController.class',
+						'com/boxstream/bs_identity/controller/PermissionController.class',
+						'com/boxstream/bs_identity/controller/RoleController.class'
+				])
+			})
+	)
 }
 
 tasks.jacocoTestCoverageVerification {
