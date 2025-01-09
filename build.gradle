@@ -77,6 +77,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
 
+	testImplementation 'org.testcontainers:testcontainers:1.19.0'                // Core Testcontainers library
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.0'               // JUnit 5 integration
+	testImplementation 'org.testcontainers:mysql:1.19.0'                      // MySQL container
 
 	// MapStruct
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'

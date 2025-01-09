@@ -44,3 +44,8 @@ Identify Service for Box Stream
 - JaCoCo:
     - Generate report: 
         ./gradlew test jacocoTestReport
+    - Config exclude packages and class that don't need to check coverage
+
+### Integration Test with TestContainer for fast release
+- Unit Test + Integration Test
+- 

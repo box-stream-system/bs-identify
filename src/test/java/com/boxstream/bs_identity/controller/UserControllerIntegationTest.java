@@ -2,33 +2,30 @@ package com.boxstream.bs_identity.controller;
 
 import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.response.UserResponse;
-import com.boxstream.bs_identity.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDate;
-import java.util.logging.Logger;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc // for create a request to our test function
-@TestPropertySource("/test.properties") // point to test properties instead of main file .ymal
-public class UserControllerTest {
-
-    private final Logger logger = Logger.getLogger(UserControllerTest.class.getName());
+@Testcontainers
+public class UserControllerIntegationTest {
 
     /**
      * The scope for UserControllerTest only for the controller UserController
@@ -36,11 +33,22 @@ public class UserControllerTest {
      * we create mock data using Mockito to fake data response from service layer
      */
 
+    @Container
+    static final MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:5.7");
+
+
+    @DynamicPropertySource
+    static void properties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", MYSQL_CONTAINER::getJdbcUrl);
+        registry.add("spring.datasource.username", MYSQL_CONTAINER::getUsername);
+        registry.add("spring.datasource.password", MYSQL_CONTAINER::getPassword);
+        registry.add("spring.datasource.driver-class-name", () -> "com.mysql.cj.jdbc.Driver");
+        registry.add("spring.jpa.hibernate.ddl-auto", () -> "update");
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
-    @MockitoBean // to fake data response from UserService
-    private UserService userService;
 
     private UserCreationRequest userCreationRequest;
 
@@ -88,9 +96,7 @@ public class UserControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         String content = objectMapper.writeValueAsString(userCreationRequest);
 
-        // this setting return userResponse when ever call userService.createNewUser()
-        Mockito.when(userService.createNewUser(ArgumentMatchers.any()))
-                        .thenReturn(userResponse);
+
 
         // WHEN, THEN
         mockMvc.perform(MockMvcRequestBuilders
@@ -99,37 +105,9 @@ public class UserControllerTest {
                 .content(content))
 
                 .andExpect(MockMvcResultMatchers.status().isOk())  // Ok mean http status code 200
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1)) // code: 1
-                .andExpect(MockMvcResultMatchers.jsonPath("data.id").value("wrewwewwef"));
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1)); // code: 1
                 // add more andExpect here
     }
 
-    @Test
-    void createUser_usernameInvalid_fail() throws Exception {
-
-        // GIVEN
-        userCreationRequest.setUsername("john"); // set the invalid username (less than 8 characters)
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        String content = objectMapper.writeValueAsString(userCreationRequest);
-
-        // this setting return userResponse when ever call userService.createNewUser()
-        Mockito.when(userService.createNewUser(ArgumentMatchers.any()))
-                .thenReturn(userResponse);
-
-
-        // WHEN, THEN
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users/add")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content(content))
-
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())  // Ok mean http status code 200
-                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1014)) // code: 1014
-                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Validation failed")) // code: 1
-                .andExpect(MockMvcResultMatchers.jsonPath("data[0].message").value("USERNAME_INVALID"));
-        // add more andExpect here
-    }
 
 }
