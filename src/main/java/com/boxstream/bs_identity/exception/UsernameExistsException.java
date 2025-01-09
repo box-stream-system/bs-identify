@@ -4,11 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class UsernameExistsException extends RuntimeException {
-    private final ErrorCode errorCode;
+  private final ErrorCode errorCode;
 
-    public UsernameExistsException() {
-        super(ErrorCode.USERNAME_ALREADY_EXISTS.getMessage());
-        this.errorCode = ErrorCode.USERNAME_ALREADY_EXISTS;
-    }
+  public UsernameExistsException() {
+    super(ErrorCode.USERNAME_ALREADY_EXISTS.getMessage());
 
+    this.errorCode = ErrorCode.USERNAME_ALREADY_EXISTS;
+  }
 }

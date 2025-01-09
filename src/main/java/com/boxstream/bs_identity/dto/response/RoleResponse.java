@@ -1,6 +1,6 @@
 package com.boxstream.bs_identity.dto.response;
-import java.util.Set;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleResponse {
-    String name;
-    String description;
-    Set<PermissionResponse> permissions;
+  String name;
+  String description;
+  Set<PermissionResponse> permissions;
 }

@@ -1,9 +1,8 @@
 package com.boxstream.bs_identity.dto.response;
 
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -11,21 +10,21 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-     String id;
+  String id;
 
-     String username;
+  String username;
 
-     String firstName;
+  String firstName;
 
-     String lastName;
+  String lastName;
 
-     String middleName;
+  String middleName;
 
-     String email;
+  String email;
 
-     String phone;
+  String phone;
 
-     String dateOfBirth;
+  String dateOfBirth;
 
-     Set<RoleResponse> roles;
+  Set<RoleResponse> roles;
 }

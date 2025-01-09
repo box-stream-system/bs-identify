@@ -10,21 +10,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserUpdateResponse {
-    private String id;
+  private String id;
 
-    private String username;
+  private String username;
 
-    private String password;
+  private String password;
 
-    private String firstName;
+  private String firstName;
 
-    private String lastName;
+  private String lastName;
 
-    private String middleName;
+  private String middleName;
 
-    private String email;
+  private String email;
 
-    private String phone;
+  private String phone;
 
-    private String dateOfBirth;
+  private String dateOfBirth;
 }

@@ -2,9 +2,33 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.1'
 	id 'io.spring.dependency-management' version '1.1.7'
-
-	id 'jacoco' // Add JaCoCo plugin
+	id 'com.diffplug.spotless' version '6.21.0'
+	id 'jacoco'
 }
+
+spotless {
+	java {
+		target 'src/main/java/com/boxstream/bs_identity/exception/**/*.java', 'src/main/java/com/boxstream/bs_identity/dto/**/*.java'
+
+		// Apply Google's Java Style Guide
+		googleJavaFormat('1.17.0') // Specify the version
+
+		// Add additional rules, if needed
+		removeUnusedImports() // Removes unused imports
+		trimTrailingWhitespace() // Removes trailing whitespaces
+		endWithNewline() // Ensures files end with a single newline
+
+		// 1 tab = 4 spaces
+		indentWithSpaces(4)
+	}
+
+	format 'misc', {
+		target '*.gradle', '*.md', '*.yml', '*.yaml'
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
 
 jacoco {
 	toolVersion = "0.8.10" // Specify JaCoCo version
