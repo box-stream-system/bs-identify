@@ -30,3 +30,6 @@ logging:
 
 jwt:
   signerKey: "EBw5PUxLRUlYDvWxh9SbbdCbtGshPPgoPDKfy9Sd/Qeu5G3lHox+lEsJ//ZDjvaf"
+  valid-duration: 3600 # 1h- time life of an token
+  refreshable-duration: 36000 # 10h - time that a token can be refreshed
+
