@@ -1,0 +1,75 @@
+### fe-demo-cors
+fe-demo-cors/example-webapp/node_modules/**
+fe-demo-cors/example-webapp/node_modules/*
+
+### Gradle ###
+.gradle/
+.gradle
+.gradle/*
+.gradle/**
+build/
+!gradle-wrapper.jar
+.gradle-cache/
+out/
+
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+
+### Eclipse ###
+.metadata/
+*.classpath
+*.project
+*.settings/
+
+### VS Code ###
+.vscode/
+
+### Operating System Files ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+logs/
+*.log
+
+### Spring Boot ###
+target/
+spring.log
+
+### Configuration ###
+*.properties
+*.yaml
+*.yml
+*.env
+
+### Dependency directories ###
+node_modules/
+bower_components/
+
+### Package Files ###
+*.jar
+*.war
+*.ear
+
+### Temp Files ###
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+### Tests ###
+test-output/
+
+### Others ###
+.envrc
+.idea_modules/
+.classpath
+.project
+.settings/
+
+# macOS files
+.AppleDouble
