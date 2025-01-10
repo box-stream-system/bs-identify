@@ -135,5 +135,80 @@ Identity Service for Box Stream
   - Store sensitive keys as environment variables on the deployment server.
   - Developers will not have access to production secrets.
 
----
-This improved version enhances readability and provides more detailed instructions for setup and usage. Let me know if there's anything you'd like to adjust or expand further.
+```markdown
+## Build and Deploy with Gradle in Linux Mint
+
+### Prerequisites
+1. **Java JDK Installation**: Ensure you have Java Development Kit (JDK) installed. Gradle requires JDK to run.
+   - Install OpenJDK:
+     ```bash
+     sudo apt update
+     sudo apt install openjdk-17-jdk
+     ```
+   - Verify installation:
+     ```bash
+     java -version
+     ```
+
+2. **Install Gradle**:
+   - Download and extract Gradle:
+     ```bash
+     sudo apt install wget unzip
+     wget https://services.gradle.org/distributions/gradle-8.4-bin.zip
+     sudo unzip gradle-8.4-bin.zip -d /opt/gradle
+     ```
+   - Add Gradle to your PATH:
+     ```bash
+     sudo nano /etc/profile.d/gradle.sh
+     ```
+     Add the following lines:
+     ```bash
+     export GRADLE_HOME=/opt/gradle/gradle-8.4
+     export PATH=$GRADLE_HOME/bin:$PATH
+     ```
+   - Make the script executable:
+     ```bash
+     sudo chmod +x /etc/profile.d/gradle.sh
+     ```
+   - Reload environment variables:
+     ```bash
+     source /etc/profile.d/gradle.sh
+     ```
+   - Verify Gradle installation:
+     ```bash
+     gradle -v
+     ```
+
+### Build the Project
+1. Navigate to the project directory:
+   ```bash
+   cd /path/to/your/project
+   ```
+
+2. Run the Gradle build command:
+   ```bash
+   ./gradlew build
+   ```
+   This will compile the source code, run tests, and create a JAR file.
+
+3. Verify the generated JAR file:
+   ```bash
+   ls build/libs/
+   ```
+
+### Deploy the Application
+1. Run the application:
+   ```bash
+   java -jar build/libs/your-app.jar
+   ```
+
+2. Run in the background:
+   ```bash
+   nohup java -jar build/libs/your-app.jar &
+   ```
+
+3. Verify that the application is running:
+   ```bash
+   curl http://localhost:8080
+   ```
+```
