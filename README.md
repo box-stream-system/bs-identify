@@ -57,3 +57,51 @@ Identify Service for Box Stream
   - Auto format code.
   - Check: ./gradlew spotlessCheck
   - Apply: ./gradlew spotlessApply
+
+### Sonar Lint and SonarQube
+- Scan and Report
+- Clean Code
+- Config SonarQ in local
+  - Add your user to the Docker group to avoid using sudo:
+  ```groovy
+  sudo usermod -aG docker $USER
+  newgrp docker
+  newgrp docker
+  ```
+  
+  ```groovy  
+  docker pull sonarqube:latest
+  nano docker-compose.yml
+  newgrp docker
+  ```
+  
+  - http://localhost:9000
+  - Import src code to Sonar
+    - From Github, Gitlab, ...
+    - Manual point from local
+    
+- Manual install sonarQ
+- docker pull sonarqube:latest
+- http://localhost:9000
+- username: admin
+- password: admin
+- Setting in project
+    ```groovy
+    plugins {
+        id "org.sonarqube" version "4.3.0.3225"
+    }
+    
+    sonarqube {
+        properties {
+        property "sonar.projectKey", "BoxStreamIdentity"
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.login", "token"
+        }
+    }
+  ```
+- Run in project folder
+  ```groovy
+  ./gradlew sonarqube
+  ```
+- Check detail at http://localhost:9000
+- 
