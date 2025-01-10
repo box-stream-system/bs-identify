@@ -45,15 +45,15 @@ public class AuthenticationService {
 
     @NonFinal // to not inject this to contructor
     @Value("${jwt.signerKey}")
-    protected String SIGNER_KEY;
+    protected String jwtSignerKey;
 
     @NonFinal
     @Value("${jwt.valid-duration}")
-    protected long VALID_DURATION; // limit time life of an token
+    protected long jwtValidDuration; // limit time life of an token
 
     @NonFinal
     @Value("${jwt.refreshable-duration}")
-    protected long REFRESH_DURATION; // limit time a token able to refresh
+    protected long jwtRefreshableDuration; // limit time a token able to refresh
 
 
     public IntrospectResponse introspect(IntrospectRequest request) throws AuthenticationFailedException, JOSEException, ParseException {
@@ -67,6 +67,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticateReturnJWT(AuthenticationRequest authenticationRequest) throws KeyLengthException {
+        log.info("SignerKey: {}", jwtSignerKey);
         User user =
                 userRepository.findByUsername(authenticationRequest.getUsername())
                         .orElseThrow(UserNotFoundException::new);
@@ -94,7 +95,7 @@ public class AuthenticationService {
                 .issuer("tienphuckx.com") // the domain that provide this JWT
                 .issueTime(new Date())
                 .expirationTime(new Date( // the time that token will be expired in 1 hour
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
+                        Instant.now().plus(jwtValidDuration, ChronoUnit.SECONDS).toEpochMilli()
                 ))
                 .claim("email", user.getEmail())
                 .claim("phone", user.getPhone())
@@ -115,7 +116,7 @@ public class AuthenticationService {
          */
 
         try {
-            jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes(StandardCharsets.UTF_8)));
+            jwsObject.sign(new MACSigner(jwtSignerKey.getBytes(StandardCharsets.UTF_8)));
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("Could not generate JWT token", e);
@@ -170,7 +171,7 @@ public class AuthenticationService {
     private SignedJWT verifyToken(String token, boolean isRefreshToken) throws JOSEException, ParseException {
 
         // get verify the signature
-        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes(StandardCharsets.UTF_8));
+        JWSVerifier verifier = new MACVerifier(jwtSignerKey.getBytes(StandardCharsets.UTF_8));
 
         // get signature from token
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -184,7 +185,7 @@ public class AuthenticationService {
                     .getJWTClaimsSet()
                     .getIssueTime()
                     .toInstant()
-                    .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
+                    .plus(jwtRefreshableDuration, ChronoUnit.SECONDS)
                     .toEpochMilli());
         }else{
             // if verify token for authenticate or introspect token

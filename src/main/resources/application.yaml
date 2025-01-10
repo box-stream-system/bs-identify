@@ -8,15 +8,15 @@ spring:
     name: bs-identity
 
   datasource:
-    url: "jdbc:mysql://localhost:3306/box-stream"
-    username: root
-    password: 123456
+    url: ${DBMS_URL}
+    username: ${DBMS_USERNAME}
+    password: ${DBMS_PWD}
     driver-class-name: "com.mysql.cj.jdbc.Driver"
 
   jpa:
     properties:
       hibernate:
-        format_sql: true
+        format_sql: false
     hibernate:
       ddl-auto: update
     show-sql: true
