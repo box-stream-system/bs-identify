@@ -5,8 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -24,7 +22,7 @@ public class User {
     String id;
 
     @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-    String username;
+    String username; //utf8mb4_unicode_ci not specific uppercase and lowercase
 
     String password;
 

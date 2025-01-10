@@ -43,7 +43,9 @@ Identify Service for Box Stream
 - A number display how many percent of our project that covered by Unit test.
 - JaCoCo:
     - Generate report:
-        ./gradlew test jacocoTestReport
+    ```groovy
+    ./gradlew test jacocoTestReport
+    ```
     - Config exclude packages and class that don't need to check coverage
 
 ### Integration Test with TestContainer for fast release
@@ -55,8 +57,11 @@ Identify Service for Box Stream
 
 - Spotless: a plugin for team members, follow the same rule.
   - Auto format code.
-  - Check: ./gradlew spotlessCheck
-  - Apply: ./gradlew spotlessApply
+  - Check: 
+  ```groovy  
+  ./gradlew spotlessCheck
+  ./gradlew spotlessApply
+  ```
 
 ### Sonar Lint and SonarQube
 - Scan and Report
@@ -104,4 +109,23 @@ Identify Service for Box Stream
   ./gradlew sonarqube
   ```
 - Check detail at http://localhost:9000
-- 
+
+
+### Concurrent - Unique field in JPA
+- If hacker create 10 requests at the same time with the same User?
+- What happened?
+- Install JMeter to your PC
+- Use JMeter to fake concurrent request to APIs. 
+```groovy
+if (userRepository.existsByUsername(newUser.getUsername())) throw new UsernameExistsException();
+```
+
+- In case you make a tool insert many user with the same user at the same time.
+- There will be many user insert with the same username in Database.
+- How to solve? 
+- Make column "username" UNIQUE
+```groovy
+@Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    String username; //utf8mb4_unicode_ci not specific uppercase and lowercase
+```
+- Done.

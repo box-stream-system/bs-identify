@@ -4,7 +4,6 @@ import com.boxstream.bs_identity.dto.request.UserCreationRequest;
 import com.boxstream.bs_identity.dto.request.UserUpdateRequest;
 import com.boxstream.bs_identity.dto.response.UserResponse;
 import com.boxstream.bs_identity.entity.User;
-import com.boxstream.bs_identity.exception.GlobalExceptionHandler;
 import com.boxstream.bs_identity.exception.InvalidUUIDFormatException;
 import com.boxstream.bs_identity.exception.UserNotFoundException;
 import com.boxstream.bs_identity.exception.UsernameExistsException;
@@ -12,20 +11,16 @@ import com.boxstream.bs_identity.mapper.UserMapper;
 import com.boxstream.bs_identity.repository.RoleRepository;
 import com.boxstream.bs_identity.repository.UserRepository;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
@@ -44,11 +39,10 @@ public class UserService {
 
     public UserResponse createNewUser(UserCreationRequest newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) throw new UsernameExistsException();
-        User user = userMapper.toUser(newUser);
 
-        // HASHING PASSWORD
+        User user = userMapper.toUser(newUser);
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        logger.info("Creating a new user: " + user.getUsername());
+        logger.info("Creating a new user: {}", user.getUsername());
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
